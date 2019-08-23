@@ -1,23 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/main_frame"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="@dimen/dp_160"
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:background="@color/colorBlue"
+            app:title="@string/app_name"
+            app:collapseIcon="@mipmap/ic_launcher_round"
+            app:titleTextColor="@color/colorWhite">
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/smartRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44" />
+
+
+
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    </LinearLayout>
+
+
+    <!--&lt;!&ndash;冲上云霄&ndash;&gt;-->
+    <!--<com.scwang.smartrefresh.header.TaurusHeader-->
+    <!--android:layout_width="match_parent"-->
+    <!--app:thPrimaryColor="@color/colorBlue"-->
+    <!--android:layout_height="@dimen/dp_60">-->
+
+    <!--</com.scwang.smartrefresh.header.TaurusHeader>-->
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_150"
+        android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@color/colorPrimary"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <include layout="@layout/head"/>
 
-</android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

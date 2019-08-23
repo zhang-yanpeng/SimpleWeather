@@ -11,6 +11,9 @@
 
     <style name="SimpleTheme" parent="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
+        <!--<item name="colorPrimary">@color/colorBlue</item>-->
+        <item name="colorPrimaryDark">@color/colorBlue</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
 
     </style>
