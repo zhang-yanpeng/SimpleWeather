@@ -3,7 +3,8 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('F:\\AndroidProject\\SimpleWeather\\sw.jks')
+//          公司电脑上的地址，与本地地址不一致
+            storeFile file('F:\\AsProject\\SimpleWeather\\sw.jks')
             keyAlias = 'simpleweather'
             storePassword 'yanpeng'
             keyPassword 'yanpeng'
@@ -25,8 +26,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
 
+    buildTypes {
 
         release {
 
@@ -61,6 +62,12 @@ dependencies {
 //下拉刷新
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'  //1.0.5及以前版本的老用户升级需谨慎，API改动过大
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'//没有使用特殊Header，可以不加这行
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    implementation files('libs\\Amap_sdk.jar')
+
+//  状态栏适配
+    api 'com.gyf.immersionbar:immersionbar:3.0.0-beta05'
+    api 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta05'
 
 }

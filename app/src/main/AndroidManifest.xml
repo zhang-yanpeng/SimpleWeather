@@ -25,21 +25,37 @@
         <activity android:name=".activity.AboutActivity"></activity>
         <activity android:name=".activity.MainActivity" />
         <activity
-            android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- 屏幕适配 -->
+        </activity>
+
+        <!-- 屏幕适配 -->
         <meta-data
             android:name="design_width_in_dp"
             android:value="360" />
         <meta-data
             android:name="design_height_in_dp"
-            android:value="640" /> <!-- 和风天气点击跳转 -->
-        <activity android:name="com.heweather.plugin.view.SdkWebViewActivity" /> <!-- 高德SDK定位服务 -->
+            android:value="640" />
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" />
+
+        <!--适配华为（huawei）刘海屏-->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true"/>
+        <!--适配小米（xiaomi）刘海屏-->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+
+        <!-- 高德SDK定位服务 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="818c63965d6557379f3a3269461f5ec6" />

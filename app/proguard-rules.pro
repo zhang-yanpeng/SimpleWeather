@@ -21,6 +21,16 @@
 #-renamesourcefileattribute SourceFile
 
 #    高德地图SDK定位
-    -keep class com.amap.api.location.**{*;}
-    -keep class com.amap.api.fence.**{*;}
-    -keep class com.autonavi.aps.amapapi.model.**{*;}
+-keep class com.amap.api.location.**{*;}
+-keep class com.amap.api.fence.**{*;}
+-keep class com.autonavi.aps.amapapi.model.**{*;}
+
+#    和风天气SDK
+-dontwarn com.squareup.**
+-dontwarn okio.**
+-keep public class org.codehaus.* { *; }
+-keep public class java.nio.* { *; }
+
+-dontwarn interfaces.heweather.com.interfacesmodule.**
+-keep class interfaces.heweather.com.interfacesmodule.** { *;}
+
