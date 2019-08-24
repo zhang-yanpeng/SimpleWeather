@@ -10,6 +10,13 @@ https://github.com/JessYanCoding/AndroidAutoSize
 下拉刷新，上拉加载更多
 https://github.com/scwang90/SmartRefreshLayout
 
+状态栏适配：（沉浸式）
+https://github.com/gyf-dev/ImmersionBar
+
+圆形Imageview：
+
+
+
 6.0动态权限：采用系统原生
 7.0相机权限：
 8.0通知权限:
