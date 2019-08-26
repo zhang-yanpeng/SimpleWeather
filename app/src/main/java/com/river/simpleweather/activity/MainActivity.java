@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.river.simpleweather.Contants;
 import com.river.simpleweather.R;
 import com.river.simpleweather.adapter.ForecastAdapter;
@@ -43,10 +46,17 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +94,8 @@ public class MainActivity extends BaseActivity {
     boolean getFuture = false;
     boolean getLife = false;
 
+    String location_city;//当前城市
+
     //  实况天气：
     NowWeather.HeWeather6Bean heNowWeather;
     //  未来天气
@@ -98,7 +110,10 @@ public class MainActivity extends BaseActivity {
             switch (msg.what) {
                 case 0:
                     if (image_bing != null) {
-                        Glide.with(mContext).load(image_url).into(image_bing);
+                        Glide.with(mContext)
+                                .load(image_url)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .into(image_bing);
                     }
 
                     break;
@@ -146,10 +161,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         boolean b = PermissionUtils.checkPermission(mContext, PermissionUtils.PERMISSION_LOCAL[0]);
         if (b) {//启动定位
-//            initLocation();
+            initLocation();
         } else {
             PermissionUtils.requestPermission(this, PermissionUtils.PERMISSION_LOCAL[0], 11);
         }
@@ -161,7 +175,10 @@ public class MainActivity extends BaseActivity {
      */
     private void initFutureWeather() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("location", "beijing");
+        if (TextUtils.isEmpty(location_city)) {
+            location_city = "beijing";
+        }
+        params.put("location", location_city);
         params.put("key", Contants.HW_API_KEY);
 
         OKhttp3Utils.getInstance(mContext).get(UrlConstant.URL_WEATHER_FEATURE, params, new OKhttp3Utils.OKCallback() {
@@ -192,7 +209,10 @@ public class MainActivity extends BaseActivity {
      */
     private void initWeatherLife() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("location", "beijing");
+        if (TextUtils.isEmpty(location_city)) {
+            location_city = "beijing";
+        }
+        params.put("location", location_city);
         params.put("key", Contants.HW_API_KEY);
 
         OKhttp3Utils.getInstance(mContext).get(UrlConstant.URL_WEATHER_LIFE, params, new OKhttp3Utils.OKCallback() {
@@ -225,7 +245,11 @@ public class MainActivity extends BaseActivity {
     private void initNowWeather() {
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("location", "beijing");
+        if (TextUtils.isEmpty(location_city)) {
+            location_city = "beijing";
+        }
+
+        params.put("location", location_city);
         params.put("key", Contants.HW_API_KEY);
 
         OKhttp3Utils.getInstance(mContext).get(UrlConstant.URL_WEATHER_NOW, params, new OKhttp3Utils.OKCallback() {
@@ -289,6 +313,11 @@ public class MainActivity extends BaseActivity {
                     String city = aMapLocation.getCity();
                     LogUtil.i("定位结果：" + city);
                     locationClient.stopLocation();
+//                  获取定位结果成功 开始获取天气
+                    location_city = city;
+//                  获取天气
+                    initWeather();
+
                 } else {
                     int errorCode = aMapLocation.getErrorCode();
                     String errorInfo = aMapLocation.getErrorInfo();
@@ -373,14 +402,25 @@ public class MainActivity extends BaseActivity {
      * 获取必应搜索每日图片
      */
     private void getBingImage() {
-        OKhttp3Utils.getInstance(mContext).get(UrlConstant.URL_IMAGE, new OKhttp3Utils.OKCallback() {
+        OKhttp3Utils.getInstance(mContext).get(UrlConstant.URL_BING_IMG_DAY, new OKhttp3Utils.OKCallback() {
 
             @Override
             public void success(Response resp) throws IOException {
-//                String string = resp.body().string();
-                image_url = resp.body().string();
+                String string = resp.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(string);
+                    JSONArray images = jsonObject.getJSONArray("images");
+                    JSONObject o = (JSONObject) images.get(0);
+                    String url = o.getString("url");
+                    image_url = UrlConstant.URL_BING + url;
+                    LogUtil.i("每日一图：" + image_url);
+                    mHandler.sendEmptyMessage(0);
 
-                mHandler.sendEmptyMessage(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
             @Override

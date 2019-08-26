@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">简单天气</string>
+
+
     <string name="jump">跳过</string>
     <string name="forecast">预报</string>
     <string name="life_index">生活指数</string>
+
 </resources>

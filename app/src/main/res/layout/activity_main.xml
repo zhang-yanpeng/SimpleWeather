@@ -34,10 +34,11 @@
                 <TextView
                     android:id="@+id/tv_city_name"
                     android:layout_width="wrap_content"
-
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/dp_40"
-                    android:textSize="@dimen/sp_16"
+                    android:text="北京"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/sp_20"
                     app:layout_constraintLeft_toLeftOf="@id/image_bing"
                     app:layout_constraintRight_toRightOf="@id/image_bing"
                     app:layout_constraintTop_toTopOf="@id/image_bing" />
@@ -47,7 +48,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_20"
-                    android:textSize="@dimen/sp_12"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/sp_14"
                     app:layout_constraintBottom_toBottomOf="@id/tv_city_name"
                     app:layout_constraintRight_toRightOf="@id/image_bing" />
 
@@ -56,6 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_20"
+                    android:textColor="@color/colorWhite"
                     android:textSize="@dimen/sp_28"
                     app:layout_constraintBottom_toBottomOf="@id/image_bing"
                     app:layout_constraintRight_toRightOf="@id/image_bing"
@@ -67,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_20"
                     android:layout_marginBottom="@dimen/dp_20"
+                    android:textColor="@color/colorWhite"
                     android:textSize="@dimen/sp_12"
                     app:layout_constraintBottom_toBottomOf="@id/image_bing"
                     app:layout_constraintRight_toRightOf="@id/image_bing" />
@@ -93,6 +97,7 @@
                     android:layout_marginLeft="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_20"
+                    android:background="@drawable/bg_weather_item"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_forecast"></androidx.recyclerview.widget.RecyclerView>

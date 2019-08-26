@@ -4,7 +4,8 @@ android {
     signingConfigs {
         debug {
 //          公司电脑上的地址，与本地地址不一致
-            storeFile file('F:\\AsProject\\SimpleWeather\\sw.jks')
+            storeFile file('F:\\AndroidProject\\SimpleWeather\\sw.jks')
+//            storeFile file('F:\\AsProject\\SimpleWeather\\sw.jks')
             keyAlias = 'simpleweather'
             storePassword 'yanpeng'
             keyPassword 'yanpeng'
