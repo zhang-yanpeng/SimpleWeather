@@ -5,5 +5,10 @@
     <string name="jump">跳过</string>
     <string name="forecast">预报</string>
     <string name="life_index">生活指数</string>
+    <string name="cancle">取 消</string>
+    <string name="sure">确 定</string>
+    <string name="setting">设置</string>
+    <string name="city_manager">城市管理</string>
+    <string name="about">关于</string>
 
 </resources>

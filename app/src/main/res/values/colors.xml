@@ -5,9 +5,14 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorGray">#66808080</color>
+    <color name="colorGray00">#000000</color>
+    <color name="colorGray1A">#1A1A1A</color>
+    <color name="colorGray80">#808080</color>
+    <color name="colorGray66">#666666</color>
 
     <color name="colorBlue">#0099FF</color>
+    <color name="colorBlue55">#aa0099FF</color>
 
-    <color name="colorWhite44">#33FFFFFF</color>
+    <color name="colorWhite44">#44FFFFFF</color>
+    <color name="colorWhite88">#88FFFFFF</color>
 </resources>

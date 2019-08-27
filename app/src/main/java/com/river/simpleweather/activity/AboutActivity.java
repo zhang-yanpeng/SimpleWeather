@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.river.simpleweather.R;
+import com.river.simpleweather.base.BaseActivity;
 
-public class AboutActivity extends AppCompatActivity {
+/**
+ * 关于
+ */
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

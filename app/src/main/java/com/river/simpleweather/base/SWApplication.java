@@ -15,7 +15,6 @@ public class SWApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         context = getApplicationContext();
     }
 

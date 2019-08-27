@@ -1,9 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBlue55"
+    android:orientation="vertical"
     tools:context=".activity.AboutActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.river.simpleweather.View.OvalImageView
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_40"
+        android:scaleType="centerInside"
+        android:src="@drawable/simple" />
+
+    <com.river.simpleweather.View.AboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:nameText="应用名称:"
+        app:valueText="简单天气">
+
+    </com.river.simpleweather.View.AboutItemView>
+
+    <com.river.simpleweather.View.AboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:nameText="当前版本:"
+        app:valueText="V 1.0">
+
+    </com.river.simpleweather.View.AboutItemView>
+
+    <com.river.simpleweather.View.AboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:nameText="天气数据来源:"
+        app:valueText="和风天气">
+
+    </com.river.simpleweather.View.AboutItemView>
+
+    <com.river.simpleweather.View.AboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:nameText="博客:"
+        app:valueText="https://blog.csdn.net/amaoagou112">
+
+    </com.river.simpleweather.View.AboutItemView>
+
+    <com.river.simpleweather.View.AboutItemView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:nameText="说明:"
+        app:valueText="">
+
+    </com.river.simpleweather.View.AboutItemView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="@dimen/sp_16"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:text="   《简单天气》是一款个人开发的开源APP，数据来源于和风天气开放接口，在github官网上搜索SimpleWeather即可查到，或者在浏览器中打开如下网址：https://github.com/zhang-yanpeng/SimpleWeather 有任何问题可以通过issues提出，开发者会尽快解决。"
+        android:textColor="@color/colorWhite"
+        android:layout_height="wrap_content" />
+
+
+
+
+</LinearLayout>

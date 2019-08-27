@@ -1,18 +1,24 @@
 package com.river.simpleweather.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -24,8 +30,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.river.simpleweather.Contants;
 import com.river.simpleweather.R;
+import com.river.simpleweather.View.BottomDialog;
+import com.river.simpleweather.View.OvalImageView;
 import com.river.simpleweather.adapter.ForecastAdapter;
 import com.river.simpleweather.adapter.LifeAdapter;
+import com.river.simpleweather.adapter.OnItemClickListener;
 import com.river.simpleweather.base.BaseActivity;
 import com.river.simpleweather.bean.ForecastWeather;
 import com.river.simpleweather.bean.ForecastWeather.HeWeather6Bean.DailyForecastBean;
@@ -33,6 +42,7 @@ import com.river.simpleweather.bean.LifeStyle;
 import com.river.simpleweather.bean.LifeStyle.HeWeather6Bean.LifestyleBean;
 import com.river.simpleweather.bean.NowWeather;
 import com.river.simpleweather.bean.WeatherBean;
+import com.river.simpleweather.utils.DateTimeUtils;
 import com.river.simpleweather.utils.GsonUtils;
 import com.river.simpleweather.utils.LogUtil;
 import com.river.simpleweather.utils.PermissionUtils;
@@ -72,6 +82,9 @@ public class MainActivity extends BaseActivity {
     //下拉刷新
     SmartRefreshLayout smartRefresh;
 
+    DrawerLayout main_rootview;
+    LinearLayout left_drawer;
+    OvalImageView app_icon;
     ImageView image_bing;
     String image_url;
     TextView tv_city_name;
@@ -84,11 +97,16 @@ public class MainActivity extends BaseActivity {
     ArrayList<DailyForecastBean> forecastBeans;
     RecyclerView.LayoutManager forecastLm;
 
-
     RecyclerView recycle_life;
     LifeAdapter lifeAdapter;
     ArrayList<LifestyleBean> lifestyleBeans;
     RecyclerView.LayoutManager lifeLm;
+
+    //左侧菜单栏
+    TextView tv_setting;
+    TextView tv_city;
+    TextView tv_about;
+
 
     boolean getNow = false;
     boolean getFuture = false;
@@ -121,9 +139,9 @@ public class MainActivity extends BaseActivity {
                     if (heNowWeather != null) {
                         NowWeather.HeWeather6Bean.NowBean now = heNowWeather.getNow();
                         NowWeather.HeWeather6Bean.BasicBean basic = heNowWeather.getBasic();
-                        tv_city_name.setText(basic.getParent_city() + " " + basic.getLocation());
+                        tv_city_name.setText(basic.getLocation());
                         tv_refresh_time.setText(heNowWeather.getUpdate().getLoc());
-                        tv_temperature.setText(now.getTmp());
+                        tv_temperature.setText(now.getTmp()+"°C");
                         tv_weather_type.setText(now.getCond_txt());
                     }
 
@@ -347,7 +365,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
     private void initView() {
+        main_rootview = findViewById(R.id.main_rootview);
+
+        app_icon = findViewById(R.id.app_icon);
         smartRefresh = findViewById(R.id.smartRefresh);
         image_bing = findViewById(R.id.image_bing);
         tv_city_name = findViewById(R.id.tv_city_name);
@@ -356,6 +378,10 @@ public class MainActivity extends BaseActivity {
         tv_weather_type = findViewById(R.id.tv_weather_type);
         recycle_forecast = findViewById(R.id.recycle_forecast);
         recycle_life = findViewById(R.id.recycle_life);
+
+        app_icon.setStrokeWidth(2);
+        app_icon.setStrokeColot(getResources().getColor(R.color.colorBlue55));
+        Glide.with(mContext).load(R.drawable.simple).into(app_icon);
 
 //      天气预报
         forecastBeans = new ArrayList<>();
@@ -369,9 +395,15 @@ public class MainActivity extends BaseActivity {
         lifestyleBeans = new ArrayList<>();
         lifeAdapter = new LifeAdapter(mContext, lifestyleBeans);
         recycle_life.setAdapter(lifeAdapter);
-        lifeLm = new LinearLayoutManager(mContext);
-        ((LinearLayoutManager) lifeLm).setOrientation(RecyclerView.VERTICAL);
+        lifeLm = new GridLayoutManager(mContext, 3, RecyclerView.VERTICAL, false);
         recycle_life.setLayoutManager(lifeLm);
+
+        lifeAdapter.setClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                showLifeDetail(position);
+            }
+        });
 
         PhoenixHeader header = new PhoenixHeader(this);
         int blue = getResources().getColor(R.color.colorBlue);
@@ -393,6 +425,117 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 refreshLayout.finishLoadMore(1000);
+            }
+        });
+
+        app_icon.setOnClickListener(this);
+
+        tv_setting = findViewById(R.id.tv_setting);
+        tv_about = findViewById(R.id.tv_about);
+        tv_city = findViewById(R.id.tv_city);
+
+        tv_setting.setOnClickListener(this);
+        tv_about.setOnClickListener(this);
+        tv_city.setOnClickListener(this);
+
+    }
+
+    /**
+     * 展示 生活指数 详情
+     */
+    String title;
+    private void showLifeDetail(int position) {
+        LifestyleBean life = lifestyleBeans.get(position);
+        if (life == null) {
+            return;
+        }
+
+        final BottomDialog bottomDialog = new BottomDialog();
+        Bundle bundle = new Bundle();
+        String type = life.getType();
+
+        if (type.equals("comf")) {
+            title = "舒适度指数";
+        }
+
+        if (type.equals("dsrg")) {
+            title = "穿衣指数";
+        }
+
+        if (type.equals("flu")) {
+            title = "感冒指数";
+        }
+
+        if (type.equals("sport")) {
+            title = "运动指数";
+        }
+
+        if (type.equals("trav")) {
+            title = "旅游指数";
+        }
+
+        if (type.equals("uv")) {
+            title = "防晒指数";
+        }
+
+        if (type.equals("air")) {
+            title = "空气指数";
+        }
+
+        bundle.putString("title", title);
+        bundle.putString("content", life.getTxt());
+        bottomDialog.setArguments(bundle);
+
+        bottomDialog.show(getSupportFragmentManager(), "showLife");
+
+        bottomDialog.setClickListener(new BottomDialog.OnDialogBtnClickListener() {
+            @Override
+            public void leftClick() {
+                bottomDialog.dismiss();
+            }
+
+            @Override
+            public void rightClick() {
+                bottomDialog.dismiss();
+            }
+        });
+
+    }
+
+    /**
+     * 为了处理退出应用的操作
+     */
+    boolean isSecond;
+    long oldTime;
+    long newTime;
+
+    @Override
+    public void onBackPressed() {
+        if (!isSecond) {//第一次
+            oldTime = DateTimeUtils.getCurrentTime();
+            isSecond = true;
+        } else {//第二次进入
+            newTime = DateTimeUtils.getCurrentTime();
+        }
+
+        final BottomDialog bottomDialog = new BottomDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", "");
+        bundle.putString("content", "确定要退出简单天气吗？");
+        bottomDialog.setArguments(bundle);
+
+        bottomDialog.show(getSupportFragmentManager(), "onBack");
+
+        bottomDialog.setClickListener(new BottomDialog.OnDialogBtnClickListener() {
+            @Override
+            public void leftClick() {
+                bottomDialog.dismiss();
+            }
+
+            @Override
+            public void rightClick() {
+                bottomDialog.dismiss();
+                MainActivity.this.finish();
             }
         });
 
@@ -437,6 +580,24 @@ public class MainActivity extends BaseActivity {
         if (locationClient != null) {
             locationClient.stopLocation();
             locationClient.onDestroy();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent it;
+        switch (v.getId()) {
+            case R.id.app_icon:
+                main_rootview.openDrawer(Gravity.LEFT);
+                break;
+            case R.id.tv_city:
+                break;
+            case R.id.tv_about:
+                it = new Intent(this, AboutActivity.class);
+                startActivity(it);
+                break;
+            case R.id.tv_setting:
+                break;
         }
     }
 }
