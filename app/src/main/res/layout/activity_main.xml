@@ -42,14 +42,17 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.river.simpleweather.View.OvalImageView
+                <ImageView
                     android:id="@+id/app_icon"
-                    android:layout_width="@dimen/dp_50"
-                    android:layout_height="@dimen/dp_50"
+                    android:layout_width="@dimen/dp_36"
+                    android:layout_height="@dimen/dp_36"
                     android:layout_marginLeft="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_40"
+                    android:src="@drawable/menu"
+                    android:scaleType="fitCenter"
                     app:layout_constraintLeft_toLeftOf="@id/image_bing"
                     app:layout_constraintTop_toTopOf="@id/image_bing" />
+
 
                 <!--城市名称-->
                 <TextView
@@ -99,6 +102,64 @@
                     app:layout_constraintRight_toRightOf="@id/image_bing"
                     app:layout_constraintTop_toBottomOf="@id/tv_temperature" />
 
+                <!--当前天气状况-->
+                <com.river.simpleweather.View.DoubleTextView
+                    android:id="@+id/weather_wind"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_10"
+                    app:bottomText="风向"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/weather_wet"
+                    app:layout_constraintTop_toBottomOf="@id/image_bing">
+
+                </com.river.simpleweather.View.DoubleTextView>
+
+                <com.river.simpleweather.View.DoubleTextView
+                    android:id="@+id/weather_wet"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_10"
+                    app:bottomText="湿度"
+                    app:layout_constraintLeft_toRightOf="@id/weather_wind"
+                    app:layout_constraintRight_toLeftOf="@id/weather_water"
+                    app:layout_constraintTop_toBottomOf="@id/image_bing">
+
+                </com.river.simpleweather.View.DoubleTextView>
+
+                <com.river.simpleweather.View.DoubleTextView
+                    android:id="@+id/weather_water"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_10"
+                    app:bottomText="降水量"
+                    app:layout_constraintLeft_toRightOf="@id/weather_wet"
+                    app:layout_constraintRight_toLeftOf="@id/weather_press"
+                    app:layout_constraintTop_toBottomOf="@id/image_bing">
+
+                </com.river.simpleweather.View.DoubleTextView>
+
+                <com.river.simpleweather.View.DoubleTextView
+                    android:id="@+id/weather_press"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    app:bottomText="大气压强"
+                    app:layout_constraintLeft_toRightOf="@id/weather_water"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image_bing">
+
+                </com.river.simpleweather.View.DoubleTextView>
+
+
                 <TextView
                     android:id="@+id/tv_forecast"
                     android:layout_width="match_parent"
@@ -111,7 +172,7 @@
                     android:textSize="@dimen/sp_16"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/image_bing" />
+                    app:layout_constraintTop_toBottomOf="@id/weather_wind" />
 
                 <!--未来三天预报-->
                 <androidx.recyclerview.widget.RecyclerView
@@ -121,7 +182,7 @@
                     android:layout_marginLeft="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_20"
-                    android:background="@drawable/bg_weather_item"
+                    android:background="@drawable/bg_double_text"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_forecast"></androidx.recyclerview.widget.RecyclerView>
@@ -142,7 +203,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycle_forecast" />
 
-                <!--未来三天预报-->
+                <!---->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_life"
                     android:layout_width="match_parent"
@@ -151,7 +212,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_20"
                     android:layout_marginBottom="@dimen/dp_20"
-                    android:background="@drawable/bg_weather_item"
+                    android:background="@drawable/bg_double_text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -179,7 +240,7 @@
         android:layout_width="@dimen/dp_150"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@color/colorWhite"
+        android:background="@color/colorBlue"
 
         android:orientation="vertical">
 
@@ -193,6 +254,7 @@
             android:layout_marginTop="@dimen/dp_50"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="@string/setting"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/sp_16" />
 
         <TextView
@@ -202,6 +264,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="@string/city_manager"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/sp_16" />
 
         <TextView
@@ -211,6 +274,7 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="@string/about"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/sp_16" />
 
     </LinearLayout>

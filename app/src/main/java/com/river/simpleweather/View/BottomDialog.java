@@ -94,6 +94,13 @@ public class BottomDialog extends DialogFragment implements View.OnClickListener
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//      关闭时需要销毁所有数据
+
+    }
+
     public interface OnDialogBtnClickListener {
         void leftClick();
 

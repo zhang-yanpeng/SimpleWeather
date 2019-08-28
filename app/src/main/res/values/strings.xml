@@ -10,5 +10,6 @@
     <string name="setting">设置</string>
     <string name="city_manager">城市管理</string>
     <string name="about">关于</string>
+    <string name="allow_botification">允许通知栏常驻</string>
 
 </resources>

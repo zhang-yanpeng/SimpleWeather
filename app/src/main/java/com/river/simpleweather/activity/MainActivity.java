@@ -1,11 +1,15 @@
 package com.river.simpleweather.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,6 +35,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.river.simpleweather.Contants;
 import com.river.simpleweather.R;
 import com.river.simpleweather.View.BottomDialog;
+import com.river.simpleweather.View.DoubleTextView;
 import com.river.simpleweather.View.OvalImageView;
 import com.river.simpleweather.adapter.ForecastAdapter;
 import com.river.simpleweather.adapter.LifeAdapter;
@@ -84,13 +89,19 @@ public class MainActivity extends BaseActivity {
 
     DrawerLayout main_rootview;
     LinearLayout left_drawer;
-    OvalImageView app_icon;
+    ImageView app_icon;
     ImageView image_bing;
     String image_url;
     TextView tv_city_name;
     TextView tv_refresh_time;
     TextView tv_temperature;
     TextView tv_weather_type;
+
+    //天气相关信息
+    DoubleTextView weather_wind;
+    DoubleTextView weather_wet;
+    DoubleTextView weather_water;
+    DoubleTextView weather_press;
 
     RecyclerView recycle_forecast;
     ForecastAdapter forecastAdapter;
@@ -107,18 +118,16 @@ public class MainActivity extends BaseActivity {
     TextView tv_city;
     TextView tv_about;
 
-
     boolean getNow = false;
     boolean getFuture = false;
     boolean getLife = false;
 
     String location_city;//当前城市
-
-    //  实况天气：
+    //实况天气：
     NowWeather.HeWeather6Bean heNowWeather;
-    //  未来天气
+    //未来天气
     ForecastWeather.HeWeather6Bean heFutureWeather;
-    //  生活指数
+    //生活指数
     List<LifeStyle.HeWeather6Bean> heLife;
 
     private Handler mHandler = new Handler() {
@@ -141,8 +150,13 @@ public class MainActivity extends BaseActivity {
                         NowWeather.HeWeather6Bean.BasicBean basic = heNowWeather.getBasic();
                         tv_city_name.setText(basic.getLocation());
                         tv_refresh_time.setText(heNowWeather.getUpdate().getLoc());
-                        tv_temperature.setText(now.getTmp()+"°C");
+                        tv_temperature.setText(now.getTmp() + "°C");
                         tv_weather_type.setText(now.getCond_txt());
+
+                        weather_press.setTopText(now.getPres());
+                        weather_water.setTopText(now.getPcpn());
+                        weather_wind.setTopText(now.getWind_dir());
+                        weather_wet.setTopText(now.getHum());
                     }
 
                     break;
@@ -179,13 +193,17 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initPermission();
+
+    }
+
+    private void initPermission(){
         boolean b = PermissionUtils.checkPermission(mContext, PermissionUtils.PERMISSION_LOCAL[0]);
         if (b) {//启动定位
             initLocation();
         } else {
             PermissionUtils.requestPermission(this, PermissionUtils.PERMISSION_LOCAL[0], 11);
         }
-        initWeather();
     }
 
     /**
@@ -220,7 +238,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
 
     /**
      * 获取生活指数
@@ -361,7 +378,28 @@ public class MainActivity extends BaseActivity {
         if (requestCode == 11 && grantResults[0] == 0) {
             initWeather();
         } else {//给出弹窗 提示需要获取定位权限并进入到权限设置页面
+            final BottomDialog dialog = new BottomDialog();
+            Bundle bundle = new Bundle();
+            bundle.putString("title", "权限说明");
+            bundle.putString("content", "简单天气需要申请定位权限来获取详细的天气信息，请您手动赋予权限");
+            dialog.setArguments(bundle);
+            dialog.show(getSupportFragmentManager(), "setting");
 
+            dialog.setClickListener(new BottomDialog.OnDialogBtnClickListener() {
+                @Override
+                public void leftClick() {
+                    location_city = "beijing";
+                    dialog.dismiss();
+                    initWeather();
+                }
+
+                @Override
+                public void rightClick() {
+//                  进入系统设置页面
+                    dialog.dismiss();
+                    toSelfSetting(mContext);
+                }
+            });
         }
     }
 
@@ -379,9 +417,10 @@ public class MainActivity extends BaseActivity {
         recycle_forecast = findViewById(R.id.recycle_forecast);
         recycle_life = findViewById(R.id.recycle_life);
 
-        app_icon.setStrokeWidth(2);
-        app_icon.setStrokeColot(getResources().getColor(R.color.colorBlue55));
-        Glide.with(mContext).load(R.drawable.simple).into(app_icon);
+        weather_wind = findViewById(R.id.weather_wind);
+        weather_water = findViewById(R.id.weather_water);
+        weather_press = findViewById(R.id.weather_press);
+        weather_wet = findViewById(R.id.weather_wet);
 
 //      天气预报
         forecastBeans = new ArrayList<>();
@@ -444,6 +483,7 @@ public class MainActivity extends BaseActivity {
      * 展示 生活指数 详情
      */
     String title;
+
     private void showLifeDetail(int position) {
         LifestyleBean life = lifestyleBeans.get(position);
         if (life == null) {
@@ -492,6 +532,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void leftClick() {
                 bottomDialog.dismiss();
+
             }
 
             @Override
@@ -583,6 +624,21 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void toSelfSetting(Context context) {
+        Intent mIntent = new Intent();
+        mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            mIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            mIntent.setAction(Intent.ACTION_VIEW);
+            mIntent.setClassName("com.android.settings", "com.android.setting.InstalledAppDetails");
+            mIntent.putExtra("com.android.settings.ApplicationPkgName", context.getPackageName());
+        }
+        context.startActivity(mIntent);
+        startActivityForResult(mIntent,100);
+    }
+
     @Override
     public void onClick(View v) {
         Intent it;
@@ -597,7 +653,19 @@ public class MainActivity extends BaseActivity {
                 startActivity(it);
                 break;
             case R.id.tv_setting:
+                it = new Intent(this,SettingActivity.class);
+                startActivity(it);
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//      重新检查系统权限
+        if (resultCode== Activity.RESULT_OK&&requestCode==100){
+            initPermission();
+        }
+
     }
 }

@@ -19,7 +19,7 @@
         android:layout_gravity="center"
         android:text="@string/app_name"
         android:layout_marginTop="@dimen/dp_10"
-        android:textColor="@color/colorBlue"
+        android:textColor="@color/colorWhite"
         android:layout_marginBottom="@dimen/dp_20"
         android:layout_height="wrap_content" />
 

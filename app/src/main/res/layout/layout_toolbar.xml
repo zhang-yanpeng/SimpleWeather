@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:padding="@dimen/dp_25"
+    android:orientation="horizontal">
+
+    <!--后退-->
+    <ImageView
+        android:id="@+id/toolbar_back"
+        android:layout_width="@dimen/dp_30"
+        android:src="@drawable/back"
+        android:layout_height="@dimen/dp_50" />
+
+    <TextView
+        android:id="@+id/tooltar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/sp_16" />
+
+</FrameLayout>

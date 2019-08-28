@@ -1,6 +1,9 @@
 package com.river.simpleweather.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 
@@ -13,9 +16,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.river.simpleweather.BuildConfig;
 import com.river.simpleweather.R;
 import com.river.simpleweather.base.BaseActivity;
 import com.river.simpleweather.utils.PermissionUtils;
+import com.river.simpleweather.utils.SharedPrefenceUtils;
 
 public class SplashActivity extends BaseActivity {
 
@@ -38,7 +43,13 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        creatNotificationChanel();
 
+        boolean allow = (boolean) SharedPrefenceUtils.getParam(mContext, "notification", false);
+        if (allow) {
+//          生成通知
+
+        }
 
         btn_jump = findViewById(R.id.btn_jump);
         btn_jump.setOnClickListener(this);
@@ -72,6 +83,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void toMain() {
+        mHandler.removeCallbacksAndMessages(null);
         Intent it = new Intent(this, MainActivity.class);
         startActivity(it);
         finish();
@@ -81,6 +93,20 @@ public class SplashActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * 生成通知渠道
+     */
+    private void creatNotificationChanel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0之后  创建通知渠道
+            String channelId = BuildConfig.APPLICATION_ID;
+            String channelName = BuildConfig.VERSION_NAME;
+            int importanceHigh = NotificationManager.IMPORTANCE_HIGH;
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importanceHigh);
+            manager.createNotificationChannel(channel);
+        }
     }
 
     @Override

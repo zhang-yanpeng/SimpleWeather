@@ -11,9 +11,9 @@
         android:id="@+id/btn_jump"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_20"
-        android:background="@drawable/bg_btn_junp"
+        android:background="@drawable/bg_double_text"
         android:text="@string/jump"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
@@ -24,23 +24,23 @@
     <ImageView
         android:id="@+id/img_splash"
         android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
+        android:layout_marginTop="@dimen/dp_200"
         android:src="@drawable/simple"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/dp_200"
-        android:layout_height="@dimen/dp_100" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/img_splash"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_40"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="@dimen/dp_150"
         android:text="@string/app_name"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/sp_26"
-        android:layout_height="wrap_content" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_splash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
